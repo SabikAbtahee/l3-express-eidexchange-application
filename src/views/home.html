@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Created</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .message {
+            font-size: 24px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="message">
+        Home
+    </div>
+<form id="dynamicForm">
+    <div class="form-group">
+        <label for="field1">Field 1:</label>
+        <input type="text" id="field1" name="field1">
+    </div>
+    <div class="form-group">
+        <label for="field2">Field 2:</label>
+        <input type="text" id="field2" name="field2">
+    </div>
+    <button type="button" id="addFieldsButton">+</button>
+</form>
+
+<script>
+    document.getElementById('addFieldsButton').addEventListener('click', function() {
+        const form = document.getElementById('dynamicForm');
+        const newField1 = document.createElement('div');
+        newField1.className = 'form-group';
+        newField1.innerHTML = `
+            <label for="newField1">New Field 1:</label>
+            <input type="text" name="newField1">
+        `;
+        const newField2 = document.createElement('div');
+        newField2.className = 'form-group';
+        newField2.innerHTML = `
+            <label for="newField2">New Field 2:</label>
+            <input type="text" name="newField2">
+        `;
+        form.appendChild(newField1);
+        form.appendChild(newField2);
+    });
+</script>
+</body>
+</html>
