@@ -22,11 +22,11 @@ app.use(
     }
 );
 app.use((req, res, next) => {
-    const host = req.get('host'); 
-    req.baseUrl = `${req.protocol}://${host}`; 
+    const host = req.get('host');
+    req.baseUrl = `${req.protocol}://${host}`;
     next();
 });
-  
+
 app.use(eventRouter);
 app.use("/participant", participantRouter);
 
