@@ -8,7 +8,8 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node dist/server.js",
         "dev": "nodemon",
-        "tailwind": "npx tailwindcss -i ./src/public/css/input.css -o ./src/public/css/main.css --watch"
+        "tailwind": "npx tailwindcss -i ./src/public/css/input.css -o ./src/public/css/main.css --watch",
+        "start:prod":"npm run build && npm run start"
     },
     "author": "Sabik Abtahee",
     "license": "MIT",
