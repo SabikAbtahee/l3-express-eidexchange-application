@@ -1,0 +1,61 @@
+<%- include('header') %>
+<form action="/create-event" method="POST" class="h-full">
+	<div class="flex flex-col items-center justify-center gap-8 h-full">
+		<div class="w-[600px] flex flex-col gap-4 justify-center">
+			<div>
+				<label for="Event Name">Event Name:</label>
+				<input type="text" id="Event Name" name="Event_Name" required />
+			</div>
+			<div>
+				<label for="Message">Event Message:</label>
+				<input type="text" id="Message" name="Message" required />
+			</div>
+			<div class="flex flex-row justify-between gap-4">
+				<div class="w-50-p">
+					<label for="EventDate">Event Date:</label>
+					<input type="date" id="EventDate" name="EventDate" required />
+				</div>
+				<div class="w-50-p">
+					<label for="Location">Location:</label>
+					<input type="text" id="Location" name="Location" required />
+				</div>
+			</div>
+			<div>
+				<label for="Amount">Amount:</label>
+				<input type="text" id="Amount" name="Amount" required />
+			</div>
+			<div class="flex flex-row justify-between gap-4">
+				<div class="w-50-p">
+					<label for="HostName">HostName:</label>
+					<input type="text" id="HostName" name="HostName" required />
+				</div>
+
+				<div class="w-50-p">
+					<label for="HostEmail">HostEmail:</label>
+					<input type="email" id="HostEmail" name="HostEmail" required />
+				</div>
+			</div>
+
+			<div id="participants-container" class="w-[600px] flex flex-col gap-4">
+				<div class="participant flex flex-row justify-between gap-4">
+					<div class="w-50-p">
+						<label for="ParticipantName">Participant Name:</label>
+						<input type="text" name="Participants[0][Name]" required />
+					</div>
+					<div class="w-50-p">
+						<label for="ParticipantEmail">Participant Email:</label>
+						<input type="email" name="Participants[0][Email]" required />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="w-[600px] flex flex-row justify-end gap-4">
+			<button type="button" id="add-participant-button">Add Participant</button>
+			<button id="create-event-button" type="submit">Create Event</button>
+		</div>
+	</div>
+</form>
+<%- include('footer') %>
+
+<script src="/js/create-event-page.js"></script>
+
