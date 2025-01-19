@@ -1,47 +1,67 @@
-import mongoose from "mongoose";
-import { v4 as uuidv4 } from "uuid";
+import { Collections } from "../const/models.const";
+import mongoose, { Schema } from "mongoose";
+import BaseSchema from "./base.model";
+import { ValidationMessages } from "../const/validation_messages.const";
+import { randomUUID } from "crypto";
 
 const eventSchema = new mongoose.Schema({
-	_id: {
-		type: String,
-		default: uuidv4,
-		trim: true
-	},
-	Message: {
-		type: String,
-		required: [true, "An event must have a message"],
-		trim: true
+    Name: {
+        type: String,
+        required: [true, ValidationMessages.Event.Name],
+        trim: true
     },
-    LastUpdateDate: {
-		type: Date,
+    Message: {
+        type: String,
+        required: [true, ValidationMessages.Event.Message],
+        trim: true
     },
-    CreateDate: {
-		type: Date,
-        default: Date.now
-	},
-	EventDate: {
-		type: Date,
-		required: [true, "An event must have a date"]
-	},
-	Location: {
-		type: String,
-		required: [true, "An event must have a location"],
-		trim: true
-	},
-	Amount: {
-		type: String,
-        required: [true, "An event must have an amount"],
-		trim: true
-	}
 
-},{collection:"Events",versionKey:false});
+    EventDate: {
+        type: Date,
+        required: [true, ValidationMessages.Event.Date],
+    },
+    Location: {
+        type: String,
+        required: [true, ValidationMessages.Event.Location],
+        trim: true
+    },
+    Amount: {
+        type: String,
+        required: [true, ValidationMessages.Event.Amount],
+        trim: true
+    },
+    IsEventInitiated: {
+        type: Boolean,
+        default: false
+    }
 
-eventSchema.pre("save", function (this: any, next: () => void)
-{
-    this.LastUpdateDate = Date.now();
-    next();
+}, {
+    collection: Collections.Events, versionKey: false, statics: {
+        isEventAvailable: function (eventId: string, secretId: string): boolean {
+            return !!this.findOne({ _id: eventId, SecretId: secretId })
+        },
+        isEventInitiated: function (eventId: string): boolean {
+            return !!this.findOne({ _id: eventId, IsEventInitiated: true })
+        },
+        initiateEvent: async function (eventId: string) {
+            await this.findOneAndUpdate({ _id: eventId }, { IsEventInitiated: true }, { new: false });
+        }
+    }
 });
 
-const EventModel = mongoose.model('Event', eventSchema);
+eventSchema.add(BaseSchema);
 
-module.exports = EventModel;
+const EventModel = mongoose.model(Collections.Events, eventSchema);
+
+export default EventModel;
+
+
+// let model = new EventModel({...}) // creates a new model instance
+// model.save(); // saves the model to the database
+// model.createEvent(); // logs 'GG
+// await EventModel.find(); // finds all the events in the database
+// await EventModel.find({ Name: 'My Event' }); // finds all the events with the name 'My Event'
+// static vs methods -> static is called on the model itself, methods are called on the instance of the model
+// instance methods, statics, query, indexes, virtuals
+// can make virtual for date formatting
+//const { randomUUID } = require('crypto');

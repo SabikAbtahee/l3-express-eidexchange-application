@@ -1,18 +1,19 @@
 import { Router } from "express";
-import { createEvent } from "../controllers/eventController"; // Adjust the path as necessary
+import * as eventController from "../controllers/eventController";
 
 const router = Router();
 
-router.route("/").post(createEvent); //.put(updateEvent)
+router.route("/").get(eventController.renderCreateEventPage);
 
-// router.route("/add_participants").post(createEvent);
-// router.route("/add_participants").post(createEvent);
+router.route("/create-event").post(eventController.createEvent);
 
+router.route("/manage-event/:eventId").get(eventController.renderManageEvent);
+
+router.route("/initiate-event/:eventId").post(eventController.initiateEvent)
+
+router.route("/get-event/:eventId").get(eventController.getEvent);
+
+router.route("/verify-event/:eventId/:secretId").get(eventController.verifyEvent)
 
 
 export default router;
-
-
-// Create Event
-// Update event, Add participant To Event
-// 

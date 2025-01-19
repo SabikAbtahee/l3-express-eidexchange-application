@@ -1,32 +1,47 @@
 {
     "name": "l3-express-eidexchange-application",
     "version": "1.0.0",
-    "main": "app.js",
+    "main": "server.js",
     "scripts": {
+        "build": "tsc && npm run copy-files",
+        "copy-files": "copyfiles -u 1 src/views/**/* dist && copyfiles -u 1 src/public/**/* dist",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node dist/index.js",
-        "dev": "nodemon"
+        "start": "node dist/server.js",
+        "dev": "nodemon",
+        "tailwind": "npx tailwindcss -i ./src/public/css/input.css -o ./src/public/css/main.css --watch"
     },
     "author": "Sabik Abtahee",
     "license": "MIT",
+    "_moduleAliases": {
+        "config": "dist/utils/config.js"
+    },
     "description": "",
     "dependencies": {
+        "@azure/communication-email": "^1.0.0",
+        "body-parser": "^1.20.3",
         "dotenv": "^16.4.7",
+        "ejs": "^3.1.10",
         "express": "^4.21.2",
         "express-handlebars": "^8.0.1",
+        "module-alias": "^2.2.3",
         "mongoose": "^8.9.2",
         "uuid": "^11.0.3",
         "validator": "^13.12.0"
     },
     "devDependencies": {
         "@mightykraken/l0-node-linter-config": "^1.10.9",
+        "@tailwindcss/forms": "^0.5.9",
+        "@types/body-parser": "^1.19.5",
         "@types/dotenv": "^6.1.1",
         "@types/express": "^5.0.0",
         "@types/express-handlebars": "^5.3.1",
         "@types/mongoose": "^5.11.96",
         "@types/node": "^22.10.2",
         "@types/validator": "^13.12.2",
+        "copyfiles": "^2.4.1",
         "nodemon": "^3.1.9",
-        "ts-node": "^10.9.2"
+        "tailwindcss": "^3.4.17",
+        "ts-node": "^10.9.2",
+        "tsconfig-paths": "^4.2.0"
     }
 }

@@ -1,0 +1,55 @@
+<%- include('header') %>
+    <div>
+        <div class="flex flex-col items-start justify-center gap-2">
+            <div>Your Eid Exchange Event Details</div>
+            <div>Event Name: <span id="eventNameId">
+                <%= eventName %>
+            </span></div>
+            <div>Date of your party: <span id="dateId">
+                    <%= date %>
+                </span></div>
+            <div>Location of your party: <span id="locationId">
+                    <%= location %>
+                </span></div>
+            <div>Amount to spend: <span id="amountId">
+                    <%= amount %>
+                </span></div>
+        </div>
+        <table class="table-auto border-collapse border border-gray-400">
+            <thead>
+                <tr>
+                    <th class="border border-gray-300 px-4 py-2">Name</th>
+                    <th class="border border-gray-300 px-4 py-2">Email</th>
+                    <th class="border border-gray-300 px-4 py-2">Email Status</th>
+                    <th class="border border-gray-300 px-4 py-2">Wish List Entered</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(let participant of participants) { %>
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">
+                            <%= participant.Name %>
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            <%= participant.Email %>
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            <% if(participant.IsEventViewed) { %>
+                                Viewed
+                                <% } else { %>
+                                    Not yet
+                                    <% } %>
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            <% if(participant.Wishlist?.length> 0) { %>
+                                Yes
+                                <% } else { %>
+                                    Not yet
+                                    <% } %>
+                        </td>
+                    </tr>
+                    <% } %>
+            </tbody>
+        </table>
+    </div>
+    <%- include('footer') %>
