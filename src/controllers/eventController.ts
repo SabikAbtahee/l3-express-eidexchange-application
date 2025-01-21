@@ -4,9 +4,9 @@ import ParticipantModel from "../models/participant.model";
 import { sendEventCreationMail } from "./emailSender";
 import { assignParticipants } from "../utils/shuffle_participants";
 import { sendInvitationToParticipants } from "../utils/invite_participant";
-
-const Event = require("./../models/event.model");
-const factory = require("./handlerFactory");
+import { IEvent } from "../interfaces/IEvent";
+import { IParticipants } from "../interfaces/IParticipants";
+import { isInviteEnabled } from "../utils/util";
 
 export const createEvent = async (req, res, next) => {
     const { Event_Name, EventDate, Location, Amount, HostName, HostEmail, Participants, Message } = req.body;
@@ -67,10 +67,27 @@ export const renderEventCreated = (req, res) => {
     res.render('event-created', { eventId: req.params.eventId });
 }
 
-export const renderManageEvent = (req, res) => {
+export const renderManageEvent = async (req, res) => {
+    let event: IEvent | null;
+    let participants: Array<IParticipants> | null | any;
+    const { eventId } = req.params;
 
-    // get eventID from url params
     // get event details
+    try {
+        event = await EventModel.findById(eventId);
+        participants = await ParticipantModel.find({ EventId: eventId }).populate('AssignedToParticipantIds');
+        if (!event || !participants) {
+            return res.status(404).render("404");
+        }
+        participants.sort((a, b) => b.IsHost - a.IsHost);
+        participants.forEach(res => {
+            res.isInviteEnabled = isInviteEnabled(res.LastEmailSentTime)
+        })
+
+    }
+    catch (err) {
+        return res.status(404).render("404");
+    }
     // get participants details
     // Add js to add participants
     // Add js to remove participants
@@ -79,31 +96,8 @@ export const renderManageEvent = (req, res) => {
     // 
 
     res.render("manage-event", {
-        eventName: "Sabuik",
-        date: new Date().toLocaleDateString(),
-        location: "Dhaka",
-        amount: "200",
-        participants: [
-            {
-                Name: "sabik",
-                Email: "sabikchamp@gmail.com",
-                IsEventViewed: true,
-                Wishlist: []
-            },
-            {
-                Name: "Abtahee",
-                Email: "sabikchamp@gmail.com",
-                IsEventViewed: false,
-                Wishlist: []
-            },
-            {
-                Name: "wow",
-                Email: "sabikchamp@gmail.com",
-                IsEventViewed: true,
-                Wishlist: ["Burger"]
-            }
-        ]
-
+        event: event,
+        participants: participants
     });
 }
 
@@ -140,27 +134,26 @@ export const initiateEvent = async (req, res) => {
     try {
         const isInitiated = await EventModel.isEventInitiated(eventId);
         if (isInitiated) {
-            return res.status(200).json({ message: "Event already initiated" })
+            return renderManageEvent(req, res);
         }
-        const participants = await ParticipantModel.find({ EventId: eventId }).exec();
+        const participants = await ParticipantModel.find({ EventId: eventId });
         const participantMap = assignParticipants(participants);
         const participantPromises = participants.map((participant: any, index: number) => {
             participant.AssignedToParticipantName = [participants.find(res => res._id == participantMap.get(participant._id))?.Name];
             return ParticipantModel.findOneAndUpdate({ _id: participant._id },
                 {
                     AssignedToParticipantIds: [participantMap.get(participant._id)],
-                    IsEventInitiated: true
                 },
                 { new: false });
         });
 
         await Promise.all(participantPromises);
-        await sendInvitationToParticipants(participants,req.baseUrl);
+        await sendInvitationToParticipants(participants, req.baseUrl);
         await EventModel.initiateEvent(eventId);
-        return res.status(200).json({ message: "Event Initiated" })
+        return renderManageEvent(req, res);
     }
     catch (error) {
-        return res.status(404).json({ message: "Failed to initiate event" });
+        return res.status(404).render("404");
     }
 
 }

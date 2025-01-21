@@ -28,10 +28,9 @@ app.use((req, res, next) => {
 });
 
 app.use(eventRouter);
-app.use("/participant", participantRouter);
+
+app.use(participantRouter);
 
 app.use(errorController.get404);
-
-
 
 export default app;

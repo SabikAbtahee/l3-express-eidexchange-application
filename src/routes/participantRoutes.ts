@@ -1,9 +1,14 @@
 import { Router } from "express";
+import * as participantController from "../controllers/participantController";
 
 const router = Router();
 
 
-// router.route("/add_participants").post(createEvent);
+router.route("/participants-matches/:eventId").get(participantController.participantMatches);
+router.route("/participants-wishlist/:eventId").get(participantController.participantWishlist);
+router.route("/invite-participant/:participantId").post(participantController.inviteParticipant);
+
+
 // router.route("/add_wishlist").post(createEvent);
 // router.route("/send_message").post(createEvent);
 

@@ -26,11 +26,11 @@ const participantSchema = new mongoose.Schema(
             type: [String],
             trim: true
         },
-        AssignedToParticipantIds: [{
-            type: String,
+        AssignedToParticipantIds: {
+            type: [String],
             ref: Collections.Participants,
             required: [true, ValidationMessages.Participant.AssignedToParticipantIds],
-        }],
+        },
         IsEventViewed: {
             type: Boolean,
             default: false
@@ -39,11 +39,15 @@ const participantSchema = new mongoose.Schema(
             type: Boolean,
             default: false
         },
+        LastEmailSentTime: {
+            type: Date,
+            default: null
+        }
     },
     {
         collection: Collections.Participants, versionKey: false, statics: {
             getEventWithParticipants: function (eventId) {
-                return this.find({EventId:eventId}).populate('EventId')
+                return this.find({ EventId: eventId }).populate('EventId')
             }
         }
     }

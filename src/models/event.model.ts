@@ -40,11 +40,12 @@ const eventSchema = new mongoose.Schema({
         isEventAvailable: function (eventId: string, secretId: string): boolean {
             return !!this.findOne({ _id: eventId, SecretId: secretId })
         },
-        isEventInitiated: function (eventId: string): boolean {
-            return !!this.findOne({ _id: eventId, IsEventInitiated: true })
+        isEventInitiated: async function (eventId: string): Promise<boolean> {
+            const a = await this.findOne({ _id: eventId, IsEventInitiated: true })
+            return !!a;
         },
         initiateEvent: async function (eventId: string) {
-            await this.findOneAndUpdate({ _id: eventId }, { IsEventInitiated: true }, { new: false });
+            return await this.findOneAndUpdate({ _id: eventId }, { IsEventInitiated: true }, { new: true });
         }
     }
 });

@@ -1,55 +1,152 @@
 <%- include('header') %>
     <div>
-        <div class="flex flex-col items-start justify-center gap-2">
-            <div>Your Eid Exchange Event Details</div>
-            <div>Event Name: <span id="eventNameId">
-                <%= eventName %>
-            </span></div>
-            <div>Date of your party: <span id="dateId">
-                    <%= date %>
+        <div class="flex flex-col items-start justify-center gap-2 border p-4 shadow-lg rounded-lg mb-4 text-xl">
+            <div class="text-2xl font-bold">Your Eid Exchange Event Details</div>
+            <div>Event Name: <span class="text-red-500 font-bold">
+                    <%= event.Name %>
                 </span></div>
-            <div>Location of your party: <span id="locationId">
-                    <%= location %>
+            <div>Date of your party: <span class="text-red-500 font-bold">
+                    <%= new Date(event.EventDate).toLocaleDateString('en-US', { year: 'numeric' , month: 'long' ,
+                        day: 'numeric' }) %>
                 </span></div>
-            <div>Amount to spend: <span id="amountId">
-                    <%= amount %>
+            <div>Location of your party: <span class="text-red-500 font-bold">
+                    <%= event.Location %>
+                </span></div>
+            <div>Amount to spend: <span class="text-red-500 font-bold">
+                    <%= event.Amount %>
                 </span></div>
         </div>
-        <table class="table-auto border-collapse border border-gray-400">
+        <table class="w-full table-auto border-collapse border-gray-400 shadow-lg rounded-lg">
             <thead>
                 <tr>
-                    <th class="border border-gray-300 px-4 py-2">Name</th>
-                    <th class="border border-gray-300 px-4 py-2">Email</th>
-                    <th class="border border-gray-300 px-4 py-2">Email Status</th>
-                    <th class="border border-gray-300 px-4 py-2">Wish List Entered</th>
+                    <th class="border border-gray-300 p-4">#</th>
+                    <th class="border border-gray-300 p-4">Name</th>
+                    <th class="border border-gray-300 p-4">Email</th>
+                    <th class="border border-gray-300 p-4">Email Status</th>
+                    <th class="border border-gray-300 p-4">Wish List Entered</th>
+                    <th class="border border-gray-300 p-4">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <% for(let participant of participants) { %>
                     <tr>
-                        <td class="border border-gray-300 px-4 py-2">
+                        <td class="border border-gray-300 p-4">
+                            <%= participants.indexOf(participant) + 1 %>
+                        </td>
+                        <td class="border border-gray-300 p-4">
                             <%= participant.Name %>
                         </td>
-                        <td class="border border-gray-300 px-4 py-2">
+                        <td class="border border-gray-300 p-4">
                             <%= participant.Email %>
                         </td>
-                        <td class="border border-gray-300 px-4 py-2">
-                            <% if(participant.IsEventViewed) { %>
-                                Viewed
+                        <td class="border border-gray-300 p-4 text-center">
+                            <% if(!event.IsEventInitiated) { %>
+                                <span class="text-red-500 font-bold">Party Not started</span>
+                                <% } else if(participant.IsEventViewed) { %>
+                                    <span class="text-emerald-600 font-bold">Viewed</span>
+                                    <% } else { %>
+                                        <span class="text-red-500 font-bold">Unseen</span>
+                                        <% } %>
+                        </td>
+                        <td class="border border-gray-300 p-4 text-center">
+                            <% if(participant.Wishlist?.length> 0) { %>
+                                <span class="text-emerald-600 font-bold">Added</span>
                                 <% } else { %>
-                                    Not yet
+                                    <span class="text-red-500 font-bold">Not yet</span>
                                     <% } %>
                         </td>
-                        <td class="border border-gray-300 px-4 py-2">
-                            <% if(participant.Wishlist?.length> 0) { %>
-                                Yes
-                                <% } else { %>
-                                    Not yet
-                                    <% } %>
+                        <td class="border border-gray-300  p-4 text-center">
+                            <a href="/edit-participant/<%= participant._id %>"
+                                class="text-blue-500 hover:text-blue-700 mr-2" title="Edit member">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="/delete-participant/<%= participant._id %>"
+                                class="text-red-500 hover:text-red-700 mr-2" title="Remove member">
+                                <i class="fas fa-times"></i>
+                            </a>
+                            <% if (participant.isInviteEnabled) {%>
+                                <a id="invite-<%= participant._id %>"
+                                    onclick="inviteParticipant('<%= participant._id %>')"
+                                    class="text-lime-600 hover:text-lime-700 mr-2 cursor-pointer"
+                                    title="Resend Invite Email">
+                                    <i class="fa-regular fa-envelope"></i>
+                                </a>
+                                <%} else {%>
+                                    <a class="text-lime-600 hover:text-lime-700 mr-2 cursor-pointer disabled"
+                                        title="Cannot send invite withing 24 hours">
+                                        <i class="fa-regular fa-envelope"></i>
+                                    </a>
+                                    <%}%>
+
                         </td>
                     </tr>
                     <% } %>
             </tbody>
         </table>
+        <div class="m-4 flex flex-row justify-end gap-4">
+
+            <button type="button" id="add-participant-button">Add Participant</button>
+        </div>
+        <% if(!event.IsEventInitiated ) { %>
+            <div class="m-4 flex flex-row justify-center gap-4">
+                <button onclick="initiateEvent(event)" type="button" id="initiate-event-button"
+                    class="bg-green-500 border-green-500 text-white">Start
+                    Event</button>
+            </div>
+            <% } else { %>
+                <div class="m-4 flex flex-row justify-center gap-4">
+
+                    <a href="/participants-matches/<%= event._id %>" class="button-class">View all matches</a>
+                    <a href="/participants-wishlist/<%= event._id %>" class="button-class">View all wishlist</a>
+                    <a href="/manage-event/<%= event._id %>?edit=true" class="button-class">Update party details</a>
+
+                </div>
+                <% } %>
+
+
+                    <div>
+
+                    </div>
+
+
     </div>
     <%- include('footer') %>
+
+        <script>
+            function initiateEvent(ev) {
+                const eventId = "<%= event._id %>";
+                const element = document.getElementById("initiate-event-button");
+                element.classList.add("animate-bounce");
+                ev.preventDefault();
+                fetch(`/initiate-event/${eventId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(data => {
+                    window.location.reload();
+                })
+                    .catch(error => {
+                        window.location.reload();
+                    });
+            }
+
+            function inviteParticipant(ev) {
+                fetch(`/invite-participant/${ev}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(data => {
+                    window.location.reload();
+                })
+                    .catch(error => {
+                        window.location.reload();
+                    });
+                const element = document.getElementById(`invite-${ev}`);
+                element.classList.add("disabled");
+
+            }
+
+
+        </script>
