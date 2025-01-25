@@ -48,6 +48,10 @@ const participantSchema = new mongoose.Schema(
         collection: Collections.Participants, versionKey: false, statics: {
             getEventWithParticipants: function (eventId) {
                 return this.find({ EventId: eventId }).populate('EventId')
+            },
+
+            getAssignedParticipantGivenCurrentParticipant: function (participantId) {
+                return this.findOne({ AssignedToParticipantIds: { $in: participantId } })
             }
         }
     }

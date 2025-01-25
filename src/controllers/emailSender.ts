@@ -1,7 +1,7 @@
 import 'config';
-import { getCreateEventEmailTemplate, getParticipantInvitationEmailTemplate } from '../const/eidexchange.const';
+import { getCreateEventEmailTemplate, getParticipantInvitationEmailTemplate, getWishlistUpdatedEmailTemplate } from '../const/eidexchange.const';
 import { ISendEmail } from '../interfaces/ISendEmail';
-import { ISendEventCreationEmail, ISendParticipantInvitationMail } from '../interfaces/ISendEventCreationEmail';
+import { ISendEventCreationEmail, ISendParticipantInvitationMail, ISendWishlistUpdatedMail } from '../interfaces/ISendEventCreationEmail';
 const { EmailClient } = require("@azure/communication-email");
 
 const connectionString = process.env.EMAIL_CONNECTION_STRING || "";
@@ -27,6 +27,18 @@ export async function sendParticipantInvitationMail(payload: ISendParticipantInv
         ReceiverEmail: payload.ReceiverEmail,
         ReceiverName: payload.ReceiverName,
     })
+}
+
+export async function sendWishlistUpdatedMail(payload: ISendWishlistUpdatedMail) { 
+    const emailTemplate = getWishlistUpdatedEmailTemplate(`${payload.BaseUrl}/participant/${payload.ParticipantId}`, payload.AssignedParticipantNames[0]);
+    return sendEmail({
+        BaseUrl: payload.BaseUrl,
+        Subject: emailTemplate.subject,
+        Template: emailTemplate.template,
+        ReceiverEmail: payload.ReceiverEmail,
+        ReceiverName: payload.ReceiverName,
+    })
+
 }
 
 async function sendEmail(payload: ISendEmail) {

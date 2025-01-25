@@ -19,24 +19,24 @@
 	[multiple],
 	textarea,
 	select {
-		@apply w-full border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500;
+		@apply w-full border-gray-300 rounded-lg shadow-sm focus:border-teal-400 focus:ring-teal-400;
 	}
 
 	button {
-		@apply border-2 border-indigo-500 text-indigo-500 font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out;
+		@apply border-2 border-teal-400 text-teal-400 font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out;
 	}
 
 	button:hover {
-		@apply bg-indigo-500 text-white;
+		@apply bg-teal-400 text-white;
 	}
 
-    ul {
-        @apply list-disc pl-5;
-    }
+	ul {
+		@apply list-disc pl-5;
+	}
 
-    ul li {
-        @apply mb-2;
-    }
+	ul li {
+		@apply mb-2;
+	}
 }
 
 html,
@@ -46,6 +46,7 @@ body {
 
 body {
 	@apply min-h-screen flex flex-col;
+	font-family: cursive;
 }
 
 .w-50-p {
@@ -63,10 +64,72 @@ body {
 	background: #000000;
 }
 
-.button-class{
-    @apply border-2 border-indigo-500 text-indigo-500 font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out;
+.button-class {
+	@apply border-2 border-teal-400 text-teal-400 font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out;
 }
 
 .button-class:hover {
-    @apply bg-indigo-500 text-white;
+	@apply bg-teal-400 text-white;
+}
+/* Spinning loader */
+.loader {
+	border: 6px solid #f3f3f3;
+	border-radius: 50%;
+	border-top: 6px solid rgb(99, 102, 241);
+	border-bottom: 6px solid #f3f3f3;
+	width: 60px;
+	height: 60px;
+	-webkit-animation: spin 1s linear infinite;
+	animation: spin 1s linear infinite;
+	position: absolute;
+	top: calc(50% - 30px);
+	left: calc(50% - 30px);
+	transform: translate(-50%, -50%);
+	z-index: 9999; /* Ensure it is above other elements */
+}
+
+/* Keyframes for spinning animation */
+@-webkit-keyframes spin {
+	0% {
+		-webkit-transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+	}
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+/* Optional: Fullscreen overlay to dim the background */
+.loader-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+	z-index: 9998; /* Ensure it is below the loader */
+}
+
+.responsive-text-xl {
+	@apply text-base md:text-lg lg:text-xl;
+}
+
+.responsive-text-md {
+	@apply text-xs md:text-sm lg:text-base;
+}
+
+.responsive-text-lg {
+	@apply text-sm md:text-base lg:text-lg;
+}
+
+.responsive-text-2xl {
+	@apply text-lg md:text-xl lg:text-2xl;
 }

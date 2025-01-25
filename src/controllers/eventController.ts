@@ -81,7 +81,7 @@ export const renderManageEvent = async (req, res) => {
         }
         participants.sort((a, b) => b.IsHost - a.IsHost);
         participants.forEach(res => {
-            res.isInviteEnabled = isInviteEnabled(res.LastEmailSentTime)
+            res.isInviteEnabled = isInviteEnabled(res.LastEmailSentTime) && !res.IsEventViewed;
         })
 
     }

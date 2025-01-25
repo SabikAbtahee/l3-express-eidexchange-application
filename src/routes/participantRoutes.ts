@@ -7,6 +7,9 @@ const router = Router();
 router.route("/participants-matches/:eventId").get(participantController.participantMatches);
 router.route("/participants-wishlist/:eventId").get(participantController.participantWishlist);
 router.route("/invite-participant/:participantId").post(participantController.inviteParticipant);
+router.route("/participant/:participantId").get(participantController.participantDetail);
+router.route("/update-wishlist/:participantId").post(participantController.updateParticipantWishlist);
+
 
 
 // router.route("/add_wishlist").post(createEvent);

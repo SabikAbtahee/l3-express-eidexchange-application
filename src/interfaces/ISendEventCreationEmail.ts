@@ -15,3 +15,6 @@ export interface ISendParticipantInvitationMail extends ISendEmailBase {
     AssignedParticipantNames: string[];
 
 }
+
+export interface ISendWishlistUpdatedMail extends ISendParticipantInvitationMail {
+}

@@ -1,104 +1,111 @@
 <%- include('header') %>
-    <div>
-        <div class="flex flex-col items-start justify-center gap-2 border p-4 shadow-lg rounded-lg mb-4 text-xl">
-            <div class="text-2xl font-bold">Your Eid Exchange Event Details</div>
-            <div>Event Name: <span class="text-red-500 font-bold">
+    <div class="p-4">
+        <div
+            class="flex flex-col items-start justify-center gap-2 border p-4 shadow-lg rounded-lg mb-4 responsive-text-md">
+            <div class="responsive-text-xl font-bold">Your Eid Exchange Event Details</div>
+            <div>Event Name: <span class="text-teal-500 font-bold">
                     <%= event.Name %>
                 </span></div>
-            <div>Date of your party: <span class="text-red-500 font-bold">
+            <div>Date of your party: <span class="text-teal-500 font-bold">
                     <%= new Date(event.EventDate).toLocaleDateString('en-US', { year: 'numeric' , month: 'long' ,
                         day: 'numeric' }) %>
                 </span></div>
-            <div>Location of your party: <span class="text-red-500 font-bold">
+            <div>Location of your party: <span class="text-teal-500 font-bold">
                     <%= event.Location %>
                 </span></div>
-            <div>Amount to spend: <span class="text-red-500 font-bold">
+            <div>Amount to spend: <span class="text-teal-500 font-bold">
                     <%= event.Amount %>
                 </span></div>
         </div>
-        <table class="w-full table-auto border-collapse border-gray-400 shadow-lg rounded-lg">
-            <thead>
-                <tr>
-                    <th class="border border-gray-300 p-4">#</th>
-                    <th class="border border-gray-300 p-4">Name</th>
-                    <th class="border border-gray-300 p-4">Email</th>
-                    <th class="border border-gray-300 p-4">Email Status</th>
-                    <th class="border border-gray-300 p-4">Wish List Entered</th>
-                    <th class="border border-gray-300 p-4">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for(let participant of participants) { %>
+        <div class="overflow-auto responsive-text-md">
+            <table class="w-full table-auto border-collapse border-gray-400 shadow-lg rounded-lg">
+                <thead>
                     <tr>
-                        <td class="border border-gray-300 p-4">
-                            <%= participants.indexOf(participant) + 1 %>
-                        </td>
-                        <td class="border border-gray-300 p-4">
-                            <%= participant.Name %>
-                        </td>
-                        <td class="border border-gray-300 p-4">
-                            <%= participant.Email %>
-                        </td>
-                        <td class="border border-gray-300 p-4 text-center">
-                            <% if(!event.IsEventInitiated) { %>
-                                <span class="text-red-500 font-bold">Party Not started</span>
-                                <% } else if(participant.IsEventViewed) { %>
-                                    <span class="text-emerald-600 font-bold">Viewed</span>
+                        <th class="border border-gray-300 p-2">#</th>
+                        <th class="border border-gray-300 p-2">Name</th>
+                        <th class="border border-gray-300 p-2">Email</th>
+                        <th class="border border-gray-300 p-2">Email Status</th>
+                        <th class="border border-gray-300 p-2">Wish List Entered</th>
+                        <th class="border border-gray-300 p-2">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(let participant of participants) { %>
+                        <tr>
+                            <td class="border border-gray-300 p-2">
+                                <%= participants.indexOf(participant) + 1 %>
+                            </td>
+                            <td class="border border-gray-300 p-2 ">
+                                <%= participant.Name %>
+                            </td>
+                            <td class="border border-gray-300 p-2 break-all">
+                                <%= participant.Email %>
+                            </td>
+                            <td class="border border-gray-300 p-2 text-center break-all">
+                                <% if(!event.IsEventInitiated) { %>
+                                    <span class="text-red-500 font-bold">Party Not started</span>
+                                    <% } else if(participant.IsEventViewed) { %>
+                                        <span class="text-emerald-600 font-bold">Viewed</span>
+                                        <% } else { %>
+                                            <span class="text-red-500 font-bold">Unseen</span>
+                                            <% } %>
+                            </td>
+                            <td class="border border-gray-300 p-2 text-center break-all">
+                                <% if(participant.Wishlist?.length> 0) { %>
+                                    <span class="text-emerald-600 font-bold">Added</span>
                                     <% } else { %>
-                                        <span class="text-red-500 font-bold">Unseen</span>
+                                        <span class="text-red-500 font-bold">Not yet</span>
                                         <% } %>
-                        </td>
-                        <td class="border border-gray-300 p-4 text-center">
-                            <% if(participant.Wishlist?.length> 0) { %>
-                                <span class="text-emerald-600 font-bold">Added</span>
-                                <% } else { %>
-                                    <span class="text-red-500 font-bold">Not yet</span>
-                                    <% } %>
-                        </td>
-                        <td class="border border-gray-300  p-4 text-center">
-                            <a href="/edit-participant/<%= participant._id %>"
+                            </td>
+                            <td class="border border-gray-300  p-2 text-center">
+                                <!-- <a href="/edit-participant/<%= participant._id %>"
                                 class="text-blue-500 hover:text-blue-700 mr-2" title="Edit member">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <a href="/delete-participant/<%= participant._id %>"
                                 class="text-red-500 hover:text-red-700 mr-2" title="Remove member">
                                 <i class="fas fa-times"></i>
-                            </a>
-                            <% if (participant.isInviteEnabled) {%>
-                                <a id="invite-<%= participant._id %>"
-                                    onclick="inviteParticipant('<%= participant._id %>')"
-                                    class="text-lime-600 hover:text-lime-700 mr-2 cursor-pointer"
-                                    title="Resend Invite Email">
-                                    <i class="fa-regular fa-envelope"></i>
-                                </a>
-                                <%} else {%>
-                                    <a class="text-lime-600 hover:text-lime-700 mr-2 cursor-pointer disabled"
-                                        title="Cannot send invite withing 24 hours">
-                                        <i class="fa-regular fa-envelope"></i>
-                                    </a>
-                                    <%}%>
+                            </a> -->
+                                <% if(event.IsEventInitiated ) {%>
+                                    <% if (participant.isInviteEnabled) {%>
+                                        <a id="invite-<%= participant._id %>"
+                                            onclick="inviteParticipant('<%= participant._id %>')"
+                                            class="text-lime-600 hover:text-lime-700 mr-2 cursor-pointer"
+                                            title="Resend Invite Email">
+                                            <i title="No longer have any actions" class="fa-regular fa-envelope"></i>
+                                        </a>
+                                        <% } else if(participant.IsEventViewed){%>
+                                            <i class="fa-solid fa-check"></i>
+                                        <%} else {%>
+                                            <a class="text-lime-600 hover:text-lime-700 mr-2 cursor-pointer disabled"
+                                                title="Cannot send invite within 24 hours">
+                                                <i class="fa-regular fa-envelope"></i>
+                                            </a>
+                                            <%}%>
+                                                <%}%>
 
-                        </td>
-                    </tr>
-                    <% } %>
-            </tbody>
-        </table>
-        <div class="m-4 flex flex-row justify-end gap-4">
+                            </td>
+                        </tr>
+                        <% } %>
+                </tbody>
+            </table>
+        </div>
+        <!-- <div class="m-4 flex flex-row justify-end gap-4">
 
             <button type="button" id="add-participant-button">Add Participant</button>
-        </div>
+        </div> -->
         <% if(!event.IsEventInitiated ) { %>
-            <div class="m-4 flex flex-row justify-center gap-4">
+            <div class="m-4 flex flex-row justify-center gap-4 responsive-text-md">
                 <button onclick="initiateEvent(event)" type="button" id="initiate-event-button"
-                    class="bg-green-500 border-green-500 text-white">Start
+                    class="bg-teal-500 border-teal-500 text-white">Start
                     Event</button>
             </div>
             <% } else { %>
-                <div class="m-4 flex flex-row justify-center gap-4">
+                <div class="m-4 flex flex-row justify-center gap-4 responsive-text-md">
 
                     <a href="/participants-matches/<%= event._id %>" class="button-class">View all matches</a>
                     <a href="/participants-wishlist/<%= event._id %>" class="button-class">View all wishlist</a>
-                    <a href="/manage-event/<%= event._id %>?edit=true" class="button-class">Update party details</a>
+                    <!-- <a href="/manage-event/<%= event._id %>?edit=true" class="button-class">Update party details</a> -->
 
                 </div>
                 <% } %>

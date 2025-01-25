@@ -1,0 +1,94 @@
+<%- include('header') %>
+<div class="flex flex-col items-start justify-center gap-2 border p-4 shadow-lg rounded-lg mb-4 responsive-text-md mt-4 mx-2">
+    <div>Hi <span class="responsive-text-xl font-bold">
+        <%= participant.Name %>
+    </span>,</div>
+    
+    <div>You are assigned to give present to <span class="responsive-text-xl font-bold">
+            <%= participant.AssignedToParticipantIds[0].Name %>
+        </span></div>
+    </div>
+
+    <div class="flex flex-col items-start justify-center gap-2 border p-4 shadow-lg rounded-lg mb-4 responsive-text-md mx-2">
+        <div class="responsive-text-xl font-bold">Your Eid Exchange Event Details</div>
+        <div>Event Name: <span class="text-teal-500 font-bold">
+                <%= event.Name %>
+            </span></div>
+        <div>Date of your party: <span class="text-teal-500 font-bold">
+                <%= new Date(event.EventDate).toLocaleDateString('en-US', { year: 'numeric' , month: 'long' ,
+                    day: 'numeric' }) %>
+            </span></div>
+        <div>Location of your party: <span class="text-teal-500 font-bold">
+                <%= event.Location %>
+            </span></div>
+        <div>Amount to spend: <span class="text-teal-500 font-bold">
+                <%= event.Amount %>
+            </span></div>
+        <div>Event Creator: <span class="text-teal-500 font-bold">
+                <%= host.Name %> (<%= host.Email%>)
+            </span></div>
+    </div>
+
+
+    <div class="flex flex-col items-start justify-center gap-2 border p-4 shadow-lg rounded-lg mb-4 responsive-text-md mx-2">
+        <div>Wishlist from <span class="responsive-text-xl font-bold">
+                <%= participant.AssignedToParticipantIds[0].Name %>
+            </span></div>
+            <% if(!participant.AssignedToParticipantIds[0].Wishlist?.length){%>
+                <div class="text-red-500">Still no wishlist has been added</div>
+            <% }%>
+
+        <ul>
+            <% for(let i of participant.AssignedToParticipantIds[0].Wishlist) {%>
+                <li class="responsive-text-xl font-bold text-teal-500">
+                    <%=i %>
+                </li>
+                <% } %>
+        </ul>
+    </div>
+
+    <div class="flex flex-col items-start justify-center gap-2 border p-4 shadow-lg rounded-lg mb-4 responsive-text-md mx-2"> 
+        <div class="responsive-text-xl">Add Your Wishlist </div>
+        <form id="wishlist-form" action="/update-wishlist/<%= participant._id %>" method="POST" class="h-full">
+            <div class="flex flex-col gap-4">
+                <% for(let i=0;i<participant.Wishlist?.length;i++) { %>
+                    <div class="flex flex-row gap-4">
+                        <div>
+                            <input type="text" id="wishlist[<%=i%>]" name="wishlist[<%=i%>]"
+                                value="<%= participant.Wishlist[i] %>" required />
+                        </div>
+                        <button class="w-[120px]" id="delete-wish" onclick="removeRow('<%=i%>')"
+                            type="button">Remove</button>
+                    </div>
+
+
+
+                    <% } %>
+                        <div class="flex flex-row gap-4">
+
+                            <div class="flex flex-row gap-4">
+                                <div>
+                                    <input type="text" name="wishlist[<%=participant.Wishlist?.length+1%>]" />
+                                </div>
+                            </div>
+                            <button type="submit" class="w-[120px]" id="add-wish" onclick="addRow('<%=participant.Wishlist?.length+1%>')"
+                                type="button">Add</button>
+                        </div>
+            </div>
+
+
+        </form>
+    </div>
+
+    <%- include('footer') %>
+
+        <script>
+            function removeRow(i) {
+                const row = document.getElementById(`wishlist[${i}]`);
+                if (row)
+                {
+                    row.remove();
+                }
+                document.getElementById('wishlist-form').submit();
+            }
+        </script>

@@ -38,11 +38,11 @@ document
 			"gap-4"
 		);
 		newParticipant.innerHTML = `
-            <div>
+            <div class="lg:flex-grow">
                 <label for="ParticipantName">Participant Name:</label>
                 <input type="text" name="participants[${participantCounter}][name]" required />
             </div>
-            <div>
+            <div class="lg:flex-grow">
                 <label for="ParticipantEmail">Participant Email:</label>
                 <input type="email" name="participants[${participantCounter}][email]" required />
             </div>
