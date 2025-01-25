@@ -11,3 +11,4 @@
 6. On this page the event and all the participants of the event will be fetched
 7. It will call GetEvent function and GetParticipants Function
 8. This page can call ResendEmail to participant, Add Participant to event, Copy participantInviteLink, updateEvent
+9. Link to website - https://eidexchange-gfeqhdgrcbhdeda6.eastus2-01.azurewebsites.net/

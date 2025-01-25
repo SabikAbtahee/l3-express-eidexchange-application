@@ -5,7 +5,7 @@
     "scripts": {
         "build": "tsc && npm run copy-files",
         "copy-files": "copyfiles -u 1 src/views/**/* dist && copyfiles -u 1 src/public/**/* dist",
-        "start": "bun dist/server.js",
+        "start": "node dist/server.js",
         "dev": "nodemon",
         "tailwind": "npx tailwindcss -i ./src/public/css/input.css -o ./src/public/css/main.css --watch",
         "start:prod":"npm run build && npm run start"
