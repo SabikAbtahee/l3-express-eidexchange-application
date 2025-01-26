@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: 'DIN';
+    src: url('/fonts/din-regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 @layer base {
 	[type="text"],
 	input:where(:not([type])),
@@ -46,7 +53,8 @@ body {
 
 body {
 	@apply min-h-screen flex flex-col;
-	font-family: cursive;
+    font-family: 'DIN', sans-serif;
+	/* font-family: cursive; */
 }
 
 .w-50-p {

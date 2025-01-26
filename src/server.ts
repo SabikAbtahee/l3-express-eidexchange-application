@@ -7,14 +7,17 @@ import 'config';
 
 const DB: string = process.env.DATABASE || "";
 const port = process.env.PORT || 3000;
+let server;
 
-mongoose.connect(DB).then(() => {
-    console.log("DB connection successful!")
+mongoose.connect(DB, {
+    dbName:"EidExchange"
+}).then(() => {
+    console.log("DB connection successful!");
+    server = app.listen(port, () => {
+        console.log(`App running on port ${port}...`);
+    });
 });
 
-let server = app.listen(port, () => {
-    console.log(`App running on port ${port}...`);
-});
 
 
 

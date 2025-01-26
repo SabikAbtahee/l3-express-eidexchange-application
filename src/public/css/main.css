@@ -1134,6 +1134,16 @@ ul li {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
+@font-face {
+  font-family: 'DIN';
+
+  src: url('/fonts/din-regular.ttf') format('truetype');
+
+  font-weight: normal;
+
+  font-style: normal;
+}
+
 html,
 body {
   height: 100%;
@@ -1143,7 +1153,8 @@ body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
-  font-family: cursive;
+  font-family: 'DIN', sans-serif;
+  /* font-family: cursive; */
 }
 
 .w-50-p {
