@@ -16,9 +16,6 @@
 		"noImplicitAny": false,                            /* Enable error reporting for expressions and declarations with an implied 'any' type. */
 		"strictNullChecks": true,                         /* When type checking, take into account 'null' and 'undefined'. */
 		"skipLibCheck": true /* Skip type checking all .d.ts files. */,
-		"paths": {
-			"config": ["./src/utils/config.ts"],
-		}
 	},
 	"include": ["src/**/*"],
 	"exclude": ["node_modules"]

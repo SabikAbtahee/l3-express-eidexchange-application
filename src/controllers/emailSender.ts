@@ -1,9 +1,11 @@
-import 'config';
 import { getCreateEventEmailTemplate, getParticipantInvitationEmailTemplate, getWishlistUpdatedEmailTemplate } from '../const/eidexchange.const';
 import { ISendEmail } from '../interfaces/ISendEmail';
 import { ISendEventCreationEmail, ISendParticipantInvitationMail, ISendWishlistUpdatedMail } from '../interfaces/ISendEventCreationEmail';
 const { EmailClient } = require("@azure/communication-email");
+import dotenv from 'dotenv';
 
+
+dotenv.config();
 const connectionString = process.env.EMAIL_CONNECTION_STRING || "";
 const client = new EmailClient(connectionString);
 

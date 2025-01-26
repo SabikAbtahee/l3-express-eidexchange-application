@@ -1,10 +1,10 @@
 import 'module-alias/register';
 import app from "./app";
 import mongoose from "mongoose";
-import 'config';
+import dotenv from 'dotenv';
 
 
-
+dotenv.config();
 const DB: string = process.env.DATABASE || "";
 const port = process.env.PORT || 3000;
 let server;
